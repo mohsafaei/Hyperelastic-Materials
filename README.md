@@ -1,5 +1,7 @@
 ### ⚙️ Repository Description
 
+Constitutive modeling is the essential mathematical framework that enables us to predict how hyperelastic materials—such as rubbers, bio-tissues, and soft polymers—respond to external loads by defining a Strain Energy Density Function ($W$) 📐. Unlike linear materials, hyperelastic solids exhibit extreme geometric and material nonlinearities, often undergoing massive deformations 🌀. By accurately capturing this complex mechanical behavior, constitutive models allow engineers to perform reliable Finite Element Analysis (FEA), which is indispensable for modern engineering design 🏎️.
+
 This repository provides comprehensive information regarding **hyperelastic materials** and their **constitutive modeling**.
 
 Based on the available data, equations have been derived for **uniaxial tension** and **pure shear** problems. 
