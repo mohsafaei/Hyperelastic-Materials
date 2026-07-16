@@ -17,10 +17,13 @@ In the `extension-torsion` file, the components of the **Cauchy stress tensor** 
 
 ### 📉 Calibration
 
-The `calibration` folder contains standard code for calibrating hyperelastic materials using several well-known strain energy functions, including:
-* **Neo-Hookean**
+The `calibration` folder contains standard code for calibrating hyperelastic materials using several well-known constitutive models, including:
 * **Mooney-Rivlin**
 * **Yeoh**
+The code experimental data from test_data.txt, then jointly calibrates three hyperelastic constitutive models—Mooney-Rivlin, Yeoh, and a custom Anssari-Benam-type model—by fitting their nominal stress predictions to both datasets using nonlinear least-squares optimization. It defines the stress response equations (First Pila P) for each loading mode, estimates the material parameters, and computes error metrics such as relative RMSE, RMSE, NRMSE, R2, and maximum error, and reports the fitted constants and goodness-of-fit for each model. 
+> prescribed bounds and initial points are needed (critical) for least-square optimization.
+Finally, it generates comparison plots of the calibrated model curves against the experimental data, saves the figures as .svg and .tiff, and writes a formatted summary of the calibration results to fit_results.txt.
+
 
 ---
 
@@ -31,4 +34,5 @@ Regarding the Python files, the following libraries have been utilized:
 * `pandas`
 * `matplotlib`
 *  `sympy` 
+*  `scipy`
 
