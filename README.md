@@ -75,9 +75,6 @@ Finally, the code generates comparison plots of the calibrated model predictions
 ### 🐍 Dependencies & Libraries
 
 Regarding the Python files, the following libraries have been utilized:
-* `numpy`
-* `pandas`
 * `matplotlib`
-*  `sympy` 
 *  `scipy`
 
