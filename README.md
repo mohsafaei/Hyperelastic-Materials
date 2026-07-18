@@ -26,31 +26,19 @@ The `calibration` folder contains standard code for calibrating incompressible h
 The strain-energy density function of the **Neo-Hookean model** is
 
 $$
-W_{\mathrm{NH}}
-=
-C_{10}(I_1-3).
+W_{\mathrm{NH}} = C_{10}(I_1-3).
 $$
 
 The **Mooney–Rivlin model** incorporates the first and second strain invariants:
 
 $$
-W_{\mathrm{MR}}
-=
-C_{10}(I_1-3)
-+
-C_{01}(I_2-3).
+W_{\mathrm{MR}} = C_{10}(I_1-3) +C_{01}(I_2-3).
 $$
 
 The third-order **Yeoh model** depends only on the first strain invariant:
 
 $$
-W_{\mathrm{Yeoh}}
-=
-C_{10}(I_1-3)
-+
-C_{20}(I_1-3)^2
-+
-C_{30}(I_1-3)^3.
+W_{\mathrm{Yeoh}} = C_{10}(I_1-3) + C_{20}(I_1-3)^2 + C_{30}(I_1-3)^3.
 $$
 
 
