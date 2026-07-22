@@ -242,7 +242,7 @@ ax_ab_s.legend()
 ax_ab_s.grid(True, which='major', linestyle='--', alpha=0.4)
 ax_ab_s.tick_params(axis='both', labelsize=11, direction='in', pad=8)
 fig.savefig("calibration_fit_separated.svg")
-fig.savefig("calibration_fit_separated.tiff")
+fig.savefig("calibration_fit_separated.jpg")
 
 plt.show()
 

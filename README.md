@@ -60,6 +60,14 @@ Finally, the code generates comparison plots of the calibrated model predictions
 
 ---
 
+
+<table>
+  <tr>
+    <td width="100%">
+        <img src="calibration_fit.jpg" alt="Description" style="max-width: 100%; height: auto;">
+    </td>
+  </tr>
+</table>
 ### 🐍 Dependencies & Libraries
 
 Regarding the Python files, the following libraries have been utilized:
