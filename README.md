@@ -1,42 +1,58 @@
 <img src="Hyperelastic_Materials.png" alt="Description" style="max-width: 100%; height: auto;">
 
-🏛️ The Foundations of Nonlinear Solid Mechanics
-Constitutive modeling is the essential mathematical framework that enables us to predict how hyperelastic materials—such as rubbers, bio-tissues, and soft polymers—respond to external loads by defining a Strain Energy Density Function ($W$) 📐. Unlike linear materials, hyperelastic solids exhibit extreme geometric and material nonlinearities, often undergoing massive deformations 🌀. By accurately capturing this complex mechanical behavior, constitutive models allow engineers to perform reliable Finite Element Analysis (FEA), which is indispensable for modern engineering design 🏎️.
+# 🏛️ The Foundations of Nonlinear Solid Mechanics
 
-- kinematics of the problem,
-- Constitutive model development,
-- imposing the equilibrium state.
+This repository presents a compact introduction to constitutive modeling for hyperelastic materials such as rubbers, soft polymers, and biological tissues. These materials can undergo large deformations, so their mechanical response must be described with nonlinear models rather than classical linear assumptions.
 
-This repository serves as a useful toolkit, offering derived governing equations of hyperelastic materials using benchmark tests such as uniaxial tension and pure shear 🛠️. Within the codebase, you will quickly discover the power and convenience of the SymPy library as a versatile tool for symbolic calculations in Python 🐍. These scripts are designed to act as an introductory tutorial, providing a clear pathway to dive into the world of constitutive modeling for nonlinear solids. High-fidelity implementations of well-known models, including the Neo-Hookean, Mooney-Rivlin, and Yeoh formulations, are all developed within the code to jumpstart your research 🌐.
+The code in this repository is organized around three main ideas:
 
-This repository provides comprehensive information regarding **hyperelastic materials** and their **constitutive modeling**.
-Based on the available data, equations have been derived for **uniaxial tension** and **pure shear** problems. 
+- describing the kinematics of deformation,
+- developing constitutive models,
+- enforcing equilibrium conditions.
 
-the **Cauchy stress tensor** are derived based on the differentiaon of the strain energy function well-defined.
-well-known strain energy functions have been ontroduced in the literature, such as 
-- **Neo-Hookean**
-- **Mooney–Rivlin**
-- **Yeoh**
+It provides a practical toolkit for studying hyperelastic behavior through benchmark deformation cases such as uniaxial tension and pure shear. The scripts use Python and `SymPy` to carry out symbolic calculations in a clear and reproducible way.
 
-The strain-energy density function of the **Neo-Hookean model** is
+This repository is intended as an introductory guide for anyone who wants to explore constitutive modeling for nonlinear solids. It includes implementations of several well-known hyperelastic models, including:
 
+- **Neo-Hookean**:
 $$
 W_{\mathrm{NH}} = C_{10}(I_1-3).
 $$
-
-The **Mooney–Rivlin model** incorporates the first and second strain invariants:
-
+- **Mooney–Rivlin**:
 $$
 W_{\mathrm{MR}} = C_{10}(I_1-3) +C_{01}(I_2-3).
 $$
-
-The third-order **Yeoh model** depends only on the first strain invariant:
-
+- **Yeoh**:
 $$
 W_{\mathrm{Yeoh}} = C_{10}(I_1-3) + C_{20}(I_1-3)^2 + C_{30}(I_1-3)^3.
 $$
 
-Before deriving the constitutive behavior. each of these models need to be fitted on experimental data for thei material constants.
+- **Gent**:
+
+These models are commonly used to represent the behavior of soft materials under large deformation. Before they can be used in analysis, their material parameters must be fitted to experimental data for the material of interest.
+
+## What this repository provides
+
+- A clear introduction to hyperelastic constitutive modeling
+- Symbolic derivations for common benchmark problems
+- Python-based scripts for model evaluation
+- A starting point for fitting material constants to test data
+- A foundation for future finite element or research applications
+
+## Typical use cases
+
+- studying the response of soft materials under load
+- comparing different hyperelastic material models
+- generating stress–stretch curves for benchmark tests
+- supporting research and teaching in nonlinear mechanics
+
+<table>
+  <tr>
+    <td width="100%">
+      <img src="Hyperelastic_Materials.jpg" alt="Figure 2" style="border-radius: 8px; width: 100%;">
+    </td>
+  </tr>
+</table>
 
 ---
 
