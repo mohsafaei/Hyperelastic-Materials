@@ -15,19 +15,32 @@ It provides a practical toolkit for studying hyperelastic behavior through bench
 This repository is intended as an introductory guide for anyone who wants to explore constitutive modeling for nonlinear solids. It includes implementations of several well-known hyperelastic models, including:
 
 - **Neo-Hookean**:
+
 $$
 W_{\mathrm{NH}} = C_{10}(I_1-3).
 $$
+
 - **Mooney–Rivlin**:
+
 $$
 W_{\mathrm{MR}} = C_{10}(I_1-3) +C_{01}(I_2-3).
 $$
+
 - **Yeoh**:
+
 $$
 W_{\mathrm{Yeoh}} = C_{10}(I_1-3) + C_{20}(I_1-3)^2 + C_{30}(I_1-3)^3.
 $$
 
 - **Gent**:
+
+$$
+W_{\mathrm{Gent}} = -\frac{\mu J_m}{2}\,\ln\!\left(1 - \frac{I_1 - 3}{J_m}\right)
+$$
+
+
+
+$$
 
 These models are commonly used to represent the behavior of soft materials under large deformation. Before they can be used in analysis, their material parameters must be fitted to experimental data for the material of interest.
 
