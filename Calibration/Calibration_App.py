@@ -1,3 +1,18 @@
+"""
+Code by Mohammad Ali Safaei
+
+mohsafaei.github.io
+email: mohammadsf1998@gmail.com
+
+Experimental data source: https://doi.org/10.1007/s10659-024-10055-y 
+this code needs to be in the same folder with test_data.txt as the input file.
+The Neo-Hookean, Mooney-Rivlin, Yeoh, and Anssari-Benam models are simultaneously calibrated using uniaxial tension and pure shear data. 
+Plots compare the calibrated constitutive models with experimental data points.
+"""
+
+# =========================
+#        Modules
+# =========================
 import tkinter as tk
 import csv
 import numpy as np
@@ -18,12 +33,14 @@ except Exception:
         "grid.alpha": 0.5,
     })
 
-
+# =========================
+#      App definition
+# =========================
 class App:
     def __init__(self, root):
         self.root = root
         self.root.title("My App")
-        self.root.geometry("700x600")
+        self.root.geometry("750x750")
 
         self.page1 = tk.Frame(root)
         self.page2 = tk.Frame(root)
@@ -143,7 +160,9 @@ class App:
         stress_u = np.array(self.uniaxial_stress, dtype=float)
         lam_s = np.array(self.shear_stretch, dtype=float)
         stress_s = np.array(self.shear_stress, dtype=float)
-
+        #--------------------
+        #    Neo-Hookean
+        #--------------------
         if model_name == "Neo-Hookean":
             def nh_uniaxial(lam, c10):
                 return 2 * c10 * (lam - lam**(-2))
@@ -166,7 +185,9 @@ class App:
             c10 = fit_nh.x[0]
             print(f"Neo-Hookean c10: {c10:.6g} MPa")
             self.fit_params = {"c10": c10}
-
+        #--------------------
+        #    Mooney-Rivlin
+        #--------------------
         elif model_name == "Mooney-Rivlin":
             def mr_uniaxial(lam, c10, c01):
                 return 2 * c10 * (lam - 1 / lam**2) + 2 * c01 * (1 - 1 / lam**3)
@@ -189,7 +210,9 @@ class App:
             c10, c01 = fit_mr.x
             print(f"Mooney-Rivlin c10, c01: {c10:.6g} MPa, {c01:.6g} MPa")
             self.fit_params = {"c10": c10, "c01": c01}
-
+        #--------------------
+        #       Yeoh
+        #--------------------
         elif model_name == "Yeoh":
             def i1_uniaxial(lam):
                 return lam**2 + 2 / lam
@@ -222,7 +245,55 @@ class App:
             c1, c2, c3 = fit_yeoh.x
             print(f"Yeoh c1, c2, c3: {c1:.6g} MPa, {c2:.6g} MPa, {c3:.6g} MPa")
             self.fit_params = {"c1": c1, "c2": c2, "c3": c3}
+        #--------------------
+        #    Anssari-Benam
+        #--------------------
+        elif model_name == "Anssari-Benam":
 
+            def dW_dI1(I1, mu1, N1, n1, beta1):
+                A = 3*(n1-1)*mu1*N1 / (2*n1)
+                return A * beta1 * ((I1-3)**(beta1-1) / (3*N1*(n1-1)) - 1/(I1-3*N1))
+
+            def dW_dI2(I2, C20, eps1):
+                return C20 * eps1 / 3 * (I2/3)**(eps1-1)
+
+            def ab_uniaxial(lam, mu1, N1, n1, beta1, C20, eps1):
+                I1 = lam**2 + 2/lam
+                I2 = 2*lam + 1/lam**2
+                w1 = dW_dI1(I1, mu1, N1, n1, beta1)
+                w2 = dW_dI2(I2, C20, eps1)
+                return 2*(lam - 1/lam**2)*w1 + 2*(1 - 1/lam**3)*w2
+
+
+            def ab_pureshear(lam, mu1, N1, n1, beta1, C20, eps1):
+                I1 = lam**2 + 1 + 1/lam**2
+                I2 = I1  # I1 == I2 in pure shear
+                w1 = dW_dI1(I1, mu1, N1, n1, beta1)
+                w2 = dW_dI2(I2, C20, eps1)
+                return 2*(lam - 1/lam**3)*(w1 + w2)
+
+            def ab_residuals_joint(x):
+                mu1, N1, n1, beta1, C20, eps1 = x
+                r_u = stress_u - ab_uniaxial(lam_u, mu1, N1, n1, beta1, C20, eps1)
+                r_s = stress_s - ab_pureshear(lam_s, mu1, N1, n1, beta1, C20, eps1)
+                return np.concatenate([r_u, r_s])
+
+            fit_ab = least_squares(
+                ab_residuals_joint,
+                x0=[0.05, 0.9, 0.7, 2.5, 2.5, 0.25],
+                bounds=(
+                    [1e-6, 1e-6, 1e-6, 1e-6, 1e-6, 1e-6],  # lower
+                    [10.0, 1.0, 10.0,  5.0, 10.0, 5.0 ]   # upper
+                )
+            )
+            mu1, N1, n1, beta1, C20, eps1 = fit_ab.x
+
+            # Unicode escapes: \u03bc = μ, \u03b2 = β, \u03b5 = ε, \u2082\u2080 = ₂₀
+            print(f"Anssari-Benam \u03bc, N, n, \u03b2, C\u2082\u2080, \u03b5: {mu1:.4g} MPa, {N1:.7g}, {n1:.4g},\n"
+            f" {beta1:.4g}, {C20:.4g} MPa, {eps1:.4g}")
+
+            self.fit_params = {"mu1": mu1, "N1": N1, "n1": n1,"beta1":beta1,
+                              "C20": C20, "eps1":eps1}
         else:
             messagebox.showinfo("Model", f"{model_name} is not implemented yet.")
             return
@@ -246,9 +317,9 @@ class App:
             wraplength=400,
             justify="center"
         )
-        label.pack(pady=20)
+        label.pack(pady=30)
 
-        btn_browse = tk.Button(self.page2, text="Browse", command=self.browse_file)
+        btn_browse = tk.Button(self.page2, text="Browse", width=15,command=self.browse_file)
         btn_browse.pack(pady=20)
 
     def build_page3(self):
@@ -297,6 +368,19 @@ class App:
         btn3.grid(row=1, column=0, padx=20, pady=8)
         btn4.grid(row=1, column=1, padx=20, pady=8)
 
+        label2_pg3 = tk.Label(
+            self.page3,
+            text=("Optimization method for fitting"),
+            wraplength=200,
+            justify="center"
+        )
+        label2_pg3.pack(pady=30)
+        btn5 = tk.Button(
+            button_frame,
+            text="Least square",
+            width=30
+        )
+
     def build_page4(self):
         for widget in self.page4.winfo_children():
             widget.destroy()
@@ -336,6 +420,31 @@ class App:
             pred_u = 2 * (lam_u - 1 / lam_u**2) * dW_u
             pred_s = 2 * (lam_s - 1 / lam_s**3) * dW_s
             label_text = "Yeoh fit"
+
+        elif self.selected_model == "Anssari-Benam":
+
+            mu1 =    self.fit_params["mu1"]
+            N1 =     self.fit_params["N1"]
+            n1 =     self.fit_params["n1"]
+            beta1 =  self.fit_params["beta1"]
+            C20 =    self.fit_params["C20"]
+            eps1 =   self.fit_params["eps1"]
+
+            A = 3*(n1-1)*mu1*N1 / (2*n1)
+            I1_u = lam_u**2 + 2/lam_u
+            I2_u = 2*lam_u + 1/lam_u**2
+            w1_u = A * beta1 * ((I1_u-3)**(beta1-1) / (3*N1*(n1-1)) - 1/(I1_u-3*N1))
+            w2_u = C20 * eps1 / 3 * (I2_u/3)**(eps1-1)
+            pred_u = 2*(lam_u - 1/lam_u**2)*w1_u + 2*(1 - 1/lam_u**3)*w2_u
+
+                    
+            I1_s = lam_s**2 + 1 + 1/lam_s**2
+            I2_s = I1_s
+            w1_s = A * beta1 * ((I1_s-3)**(beta1-1) / (3*N1*(n1-1)) - 1/(I1_s-3*N1))
+            w2_s = C20 * eps1 / 3 * (I2_s/3)**(eps1-1)
+            pred_s = 2*(lam_s - 1/lam_s**3)*(w1_s + w2_s)
+            label_text = "Anssari-Benam fit"
+
 
         else:
             messagebox.showerror("Error", "No valid model results are available.")
