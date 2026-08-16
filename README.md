@@ -1,5 +1,15 @@
 <img src="Hyperelastic_Materials.png" alt="Description" style="max-width: 100%; height: auto;">
 
+
+# Installation requirements
+
+To install the required dependencies, run the following command in your terminal:
+
+```bash
+pip install matplotlib scipy sympy numpy
+```
+
+
 # 🏛️ The Foundations of Nonlinear Solid Mechanics
 
 This repository presents a compact introduction to constitutive modeling for hyperelastic materials such as rubbers, soft polymers, and biological tissues. These materials can undergo large deformations, so their mechanical response must be described with nonlinear models rather than classical linear assumptions.
@@ -17,18 +27,22 @@ This repository is intended as an introductory guide for anyone who wants to exp
 - **Neo-Hookean**:
 
 \begin{equation}
-W_{\mathrm{NH}} = C_{10}(I_1-3).
+
+W_{\mathrm{NH}} = C_{10}(I_1-3)
+
 \end{equation}
 
 - **Mooney–Rivlin**:
 
-\begin{equation}
-W_{\mathrm{MR}} = C_{10}(I_1-3) +C_{01}(I_2-3).
+
+\begin{equation} 
+W_{\mathrm{MR}} = C_{10}(I_1 - 3) + C_{01}(I_2 - 3)
 \end{equation}
+
 
 - **Gent**:
 
-\begin{equation}
+\begin{equation} 
 W_{\mathrm{Gent}} = -\frac{\mu J_m}{2}\,\ln\!\left(1 - \frac{I_1 - 3}{J_m}\right)
 \end{equation}
 
@@ -123,11 +137,3 @@ A `.csv` file with four columns (no header required):
     </td>
   </tr>
 </table>
-
-### Libraries used
-
-* `matplotlib`
-*  `scipy`
-*  `sympy`
-*  `numpy`
-
