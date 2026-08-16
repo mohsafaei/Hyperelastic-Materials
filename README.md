@@ -26,34 +26,36 @@ This repository is intended as an introductory guide for anyone who wants to exp
 
 - **Neo-Hookean**:
 
-\begin{equation}
 
+$$
 W_{\mathrm{NH}} = C_{10}(I_1-3)
+$$
 
-\end{equation}
 
 - **Mooney–Rivlin**:
 
 
-\begin{equation} 
+$$
 W_{\mathrm{MR}} = C_{10}(I_1 - 3) + C_{01}(I_2 - 3)
-\end{equation}
+$$
 
 
 - **Gent**:
 
-\begin{equation} 
+$$
 W_{\mathrm{Gent}} = -\frac{\mu J_m}{2}\,\ln\!\left(1 - \frac{I_1 - 3}{J_m}\right)
-\end{equation}
+$$
 
 - **Yeoh**:
 
-\begin{equation}
+$$
 W_{\mathrm{Yeoh}} = C_{10}(I_1-3) + C_{20}(I_1-3)^2 + C_{30}(I_1-3)^3.
-\end{equation}
+$$
 
 - **Anssari-Benam**:
-
+$$
+W_{\mathrm{Anssari-Benam}} = C_{10}(I_1-3) + C_{20}(I_1-3)^2 + C_{30}(I_1-3)^3.
+$$
 
 These models are commonly used to represent the behavior of soft materials under large deformation. Before they can be used in analysis, their material parameters must be fitted to experimental data for the material of interest.
 
