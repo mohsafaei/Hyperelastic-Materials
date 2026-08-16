@@ -16,27 +16,29 @@ This repository is intended as an introductory guide for anyone who wants to exp
 
 - **Neo-Hookean**:
 
-$$
+\begin{equation}
 W_{\mathrm{NH}} = C_{10}(I_1-3).
-$$
+\end{equation}
 
 - **Mooney–Rivlin**:
 
-$$
+\begin{equation}
 W_{\mathrm{MR}} = C_{10}(I_1-3) +C_{01}(I_2-3).
-$$
+\end{equation}
 
 - **Gent**:
 
-$$
+\begin{equation}
 W_{\mathrm{Gent}} = -\frac{\mu J_m}{2}\,\ln\!\left(1 - \frac{I_1 - 3}{J_m}\right)
-$$
+\end{equation}
 
 - **Yeoh**:
 
-$$
+\begin{equation}
 W_{\mathrm{Yeoh}} = C_{10}(I_1-3) + C_{20}(I_1-3)^2 + C_{30}(I_1-3)^3.
-$$
+\end{equation}
+
+- **Anssari-Benam**:
 
 
 These models are commonly used to represent the behavior of soft materials under large deformation. Before they can be used in analysis, their material parameters must be fitted to experimental data for the material of interest.
@@ -67,10 +69,14 @@ These models are commonly used to represent the behavior of soft materials under
 ---
 
 
-### 📉 Calibration
+# 📉 Calibration
+The `calibration` folder contains a standard raw Python code as well as a Python app (more user-friendly) for fitting well-known material models (mentioned before).
+The code uses experimental data for uniaxial tension and pure shear tests.
 
-The `calibration` folder contains the standard python code for the above-mentioned material models on several benchmark experimental test.
-the code Calibration.py experimental data from `test_data.txt` and jointly calibrates the hyperelastic constitutive models by fitting their nominal-stress predictions to the available datasets using nonlinear least-squares optimization. It defines the first Piola–Kirchhoff stress response for each loading mode, estimates the material parameters, and evaluates the quality of each fit using metrics such as:
+## Calibration raw code
+
+In `Calibration_raw.py`, experimental data should be provided as a .txt file named `test_data.txt`. The code jointly calibrates the chosen models to the experimental data using nonlinear least-squares optimization. The first Piola–Kirchhoff stress is used in this case.
+At the end, the material parameters are estimated and reported. The quality of calibration is evaluated using metrics:
 
 - Relative root-mean-square error
 - Root-mean-square error (**RMSE**)
@@ -79,12 +85,33 @@ the code Calibration.py experimental data from `test_data.txt` and jointly calib
 - Maximum absolute error
 
 The fitted material constants and corresponding goodness-of-fit measures are then reported for each constitutive model.
+Finally, the code generates comparison plots of the calibrated model predictions against the experimental data, saves the figures in `.svg` and `.tiff` formats, and writes a formatted summary of the calibration results to `fit_results.txt`.
 
 > **Important:** Appropriate parameter bounds and initial guesses are critical for obtaining stable and physically meaningful solutions from nonlinear least-squares optimization.
 
----
 
-Finally, the code generates comparison plots of the calibrated model predictions against the experimental data, saves the figures in `.svg` and `.tiff` formats, and writes a formatted summary of the calibration results to `fit_results.txt`.
+## Calibration App
+
+A Python app for calibrating hyperelastic constitutive models to experimental stress-stretch data saved as `Calibration_App`.
+
+## What it does
+
+Loads uniaxial tension and pure shear test data from a CSV file, fits one of five hyperelastic models to the data using nonlinear least squares, and displays the fitted parameters alongside comparison plots.
+
+## Supported Models
+
+| Model | Parameters |
+|---|---|
+| Neo-Hookean | C₁₀ |
+| Mooney-Rivlin | C₁₀, C₀₁ |
+| Gent | μ, Jₘ |
+| Yeoh | C₁, C₂, C₃ |
+| Anssari-Benam | μ, N, n, β, C₂₀, ε |
+
+## Input Format
+
+A `.csv` file with four columns (no header required):
+
 
 ---
 
