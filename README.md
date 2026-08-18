@@ -55,23 +55,9 @@ $$
 - **Anssari-Benam**:
 
 $$
-W(I_1, I_2)
-=
-3^{\frac{n_1-1}{2n_1}} \mu_1 N_1
-\left[
-\frac{(I_1-3)^{\beta_1}}{3N_1(n_1-1)}
--
-\ln\!\left(
-\left(
-\frac{I_1-3N_1}{3-3N_1}
-\right)^{\beta_1}
-\right)
-+
-c_{20}
-\left(
-\left(\frac{I_2}{3}\right)^{\varepsilon_1} - 1
-\right)
-\right]
+W(I_1, I_2) = 3^{\frac{n_1-1}{2n_1}} \mu_1 N_1 \left[ \frac{(I_1-3)^{\beta_1}}{3N_1(n_1-1)}
+- \ln\!\left(\left(\frac{I_1-3N_1}{3-3N_1}\right)^{\beta_1}\right)
++ c_{20}\left(\left(\frac{I_2}{3}\right)^{\varepsilon_1} - 1\right)\right]
 $$
 
 
