@@ -54,26 +54,7 @@ $$
 
 - **Anssari-Benam**:
 $$
-W(\bar{I}_1,\bar{I}_2)
-=
-3^{\frac{n_1-1}{2n_1}}
-\mu_1 N_1
-\left[
-\frac{1}{3N_1(n_1-1)}
-(\bar{I}_1-3)^{\beta_1}
--
-\ln\left[
-\left(
-\frac{\bar{I}_1-3N_1}{3-3N_1}
-\right)^{\beta_1}
-\right]
-+
-c_{20}
-\left[
-\left(\frac{\bar{I}_2}{3}\right)^{\varepsilon_1}
--1
-\right]
-\right]
+W(\bar{I}_1,\bar{I}_2) = 3^{\frac{n_1-1}{2n_1}} \mu_1 N_1 \left[\frac{1}{3N_1(n_1-1)} (\bar{I}_1-3)^{\beta_1} - \ln\left[ \left( \frac{\bar{I}_1-3N_1}{3-3N_1} \right)^{\beta_1} \right] + c_{20} \left[ \left(\frac{\bar{I}_2}{3}\right)^{\varepsilon_1} -1 \right] \right]
 $$
 
 These models are commonly used to represent the behavior of soft materials under large deformation. Before they can be used in analysis, their material parameters must be fitted to experimental data for the material of interest.
