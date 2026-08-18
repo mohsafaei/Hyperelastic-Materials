@@ -386,7 +386,7 @@ print("\n" + mr_table)
 print("\n" + yeoh_table)
 print("\n" + ab_table)
 
-results_path = "fit_results.txt"
+results_path = self.selected_moodel + "_fitting_result.txt"
 with open(results_path, "w") as f:
     f.write("Hyperelastic material calibration - fit results\n")
     f.write("=" * 60 + "\n\n")

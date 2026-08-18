@@ -77,7 +77,7 @@ These models are commonly used to represent the behavior of soft materials under
 <table>
   <tr>
     <td width="100%">
-      <img src="Hyperelastic_Materials.jpg" alt="Figure 2" style="border-radius: 8px; width: 100%;">
+      <img src="Hyperelastic_Materials2.jpg" alt="Figure 2" style="border-radius: 8px; width: 100%;">
     </td>
   </tr>
 </table>
