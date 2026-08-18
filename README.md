@@ -43,7 +43,7 @@ $$
 - **Gent**:
 
 $$
-W_{\mathrm{Gent}} = -\frac{\mu J_m}{2}\ln\!\left(1 - \frac{I_1 - 3}{J_m}\right)
+W_{\mathrm{Gent}} = -\frac{\mu J_m}{2}\ln\left(1 - \frac{I_1 - 3}{J_m}\right)
 $$
 
 - **Yeoh**:
