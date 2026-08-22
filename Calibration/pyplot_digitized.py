@@ -25,7 +25,9 @@ class GrabitApp:
     def __init__(self, root, filename=None):
         self.root = root
         root.title("grabit - Image Digitizer")
-        root.geometry("1050x700")
+        root.geometry("900x620")
+        root.minsize(720, 500)
+
         self.image = None
         self.tk_image = None
         self.image_path = None
@@ -47,10 +49,28 @@ class GrabitApp:
         self.pan_start = None
         self._build_ui()
         self.root.bind('<Key>', self.on_key_press)
-        root.bind('<Configure>', lambda e: self.redraw())
-        if filename:
-            self.load_image(filename)
+        self._resize_job = None
+        self.canvas.bind('<Configure>', self.on_canvas_resize)
 
+        if filename:
+            # Debounce frequent Configure events while resizing the window.
+            if self._resize_job is not None:
+                self.root.after_cancel(self._resize_job)
+
+            self._resize_job = self.root.after(100, self.fit_view)
+
+    def on_canvas_resize(self, event=None):
+        """Automatically refit the loaded image after resizing the app window."""
+        if not self.image:
+            return
+
+        # Avoid repeatedly resizing the image during every tiny resize event.
+        if self._resize_job is not None:
+            self.root.after_cancel(self._resize_job)
+
+        self._resize_job = self.root.after(100, self.fit_view)
+
+            
     def _build_ui(self):
         top = ttk.Frame(self.root, padding=4)
         top.pack(fill='x')
@@ -67,14 +87,34 @@ class GrabitApp:
         ttk.Label(top, text='  a/b: zoom   Space: fit').pack(side='right')
 
         body = ttk.Frame(self.root)
+        body = ttk.Frame(self.root)
         body.pack(fill='both', expand=True)
-        self.canvas = tk.Canvas(body, background='#303030', highlightthickness=0, cursor='crosshair')
-        self.canvas.pack(side='left', fill='both', expand=True)
-        side = ttk.Frame(body, width=230, padding=6)
-        side.pack(side='right', fill='y')
+
+        # Column 0: image/canvas area expands.
+        # Column 1: dataset sidebar stays at a controlled width.
+        body.grid_columnconfigure(0, weight=1)
+        body.grid_columnconfigure(1, weight=0)
+        body.grid_rowconfigure(0, weight=1)
+
+        self.canvas = tk.Canvas(
+            body,
+            background='#303030',
+            highlightthickness=0,
+            cursor='crosshair'
+        )
+        self.canvas.grid(row=0, column=0, sticky='nsew')
+
+        # Fixed-width dataset panel
+        side = ttk.Frame(body, width=200, padding=6)
+        side.grid(row=0, column=1, sticky='ns')
+
+        # Makes the requested width meaningful instead of allowing widgets
+        # inside the sidebar to determine its width.
+        side.grid_propagate(False)
+
         ttk.Label(side, text='Datasets', font=('TkDefaultFont', 11, 'bold')).pack(anchor='w')
         self.listbox = tk.Listbox(side, height=18, exportselection=False)
-        self.listbox.pack(fill='both', expand=True, pady=4)
+        self.listbox.pack(fill='both', expand=True, pady=5)
         self.listbox.bind('<Double-Button-1>', self.on_dataset_double_click)
         buttons = ttk.Frame(side); buttons.pack(fill='x')
         ttk.Button(buttons, text='Save Current as Dataset', command=self.on_save_dataset).pack(fill='x')
@@ -109,20 +149,35 @@ class GrabitApp:
             self.image_path = path
             self.zoom = 1.0; self.pan_x = self.pan_y = 0
             self.cancel_calibration(); self.im_dat = []; self.true_dat = []
-            self.fit_view()
             # Canvas equivalent of the original axis limits: the full image extent.
             self.original_xlim = (0, self.image.width)
             self.original_ylim = (0, self.image.height)
+
+            # Run after Tkinter finishes calculating the real canvas dimensions.
+            self.root.after_idle(self.fit_view)
+
         except Exception as exc:
             messagebox.showerror('Load image', str(exc))
 
     def fit_view(self):
-        if not self.image: return
-        w, h = max(1, self.canvas.winfo_width()), max(1, self.canvas.winfo_height())
-        self.zoom = min(w / self.image.width, h / self.image.height, 1.0)
-        self.pan_x = (w - self.image.width * self.zoom) / 2
-        self.pan_y = (h - self.image.height * self.zoom) / 2
+        if not self.image:
+            return
+
+        canvas_width = max(1, self.canvas.winfo_width())
+        canvas_height = max(1, self.canvas.winfo_height())
+
+        # Scale so the entire image remains visible and fills the available area.
+        self.zoom = min(
+            canvas_width / self.image.width,
+            canvas_height / self.image.height
+        )
+
+        # Centre the fitted image.
+        self.pan_x = (canvas_width - self.image.width * self.zoom) / 2
+        self.pan_y = (canvas_height - self.image.height * self.zoom) / 2
+
         self.redraw()
+
 
     def redraw(self):
         self.canvas.delete('all')
@@ -314,7 +369,9 @@ class GrabitApp:
     def on_dataset_double_click(self, event=None):
         name = self._selected_name()
         if not name: return
-        win = tk.Toplevel(self.root); win.title('Array Editor: '+name); win.geometry('420x350')
+        win = tk.Toplevel(self.root); win.title('Array Editor: '+name)
+        win.geometry('650x500')
+        win.minsize(450, 300)
         tree = ttk.Treeview(win, columns=('x','y'), show='headings'); tree.heading('x', text='X'); tree.heading('y', text='Y'); tree.pack(fill='both', expand=True)
         for row in self.datasets[name]: tree.insert('', 'end', values=row)
         ttk.Button(win, text='Close', command=win.destroy).pack(pady=4)
