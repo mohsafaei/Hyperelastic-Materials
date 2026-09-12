@@ -10,9 +10,29 @@ Please cite: Multiaxial Finite Strain Behavior of Polydomain Liquid Crystal Elas
 
        
 Experimental data source: https://doi.org/10.1007/s10659-024-10055-y 
-this code needs to be in the same folder with test_data.txt as the input file.
-The Neo-Hookean, Mooney-Rivlin, Yeoh, and Anssari-Benam models are simultaneously calibrated using uniaxial tension and pure shear data. 
-Plots compare the calibrated constitutive models with experimental data points.
+
+
+Calibration_App.py calibrates hyperelastic constitutive models against experimental data.
+
+Input Requirements:
+    Requires a CSV file containing uniaxial and pure shear test results structured 
+    with the following columns:
+    [stretch_uniaxial, stress_uniaxial, stretch_pure_shear, stress_pure_shear]
+
+Implemented Constitutive Models:
+    - Neo-Hookean
+    - Mooney-Rivlin
+    - Yeoh
+    - Gent
+    - Anssari-Benam
+
+Outputs:
+    - Graphical User Interface / Visualization: Calibration curves, goodness-of-fit 
+      metrics (e.g., R², RMSE), and identified material parameters displayed in 
+      dedicated panels.
+    - Exported Files: A vector graphic of the calibration plots (.svg) and a summary 
+      report of the fitting metrics and parameters (.txt) saved to the working directory.
+
 """
 
 # =========================
@@ -26,6 +46,7 @@ from tkinter import filedialog, messagebox, font
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from tkinter.scrolledtext import ScrolledText
 from scipy.optimize import least_squares
 try:
     import scienceplots
@@ -410,7 +431,8 @@ class App:
             messagebox.showinfo("Model", f"{model_name} is not implemented yet.")
             return
 
-        self.save_metrics_table()
+        self.metrics_table = self.save_metrics_table()
+
         self.build_page4()
         self.show_page4()
 
@@ -500,6 +522,7 @@ class App:
             f.write("=" * 60 + "\n\n")
             f.write(table + "\n")
         print(f"Saved: {results_path}")
+        return table          # <-- add this
 
     # ------------------------------------------------------------------
     #  Results page
@@ -595,9 +618,12 @@ class App:
         fig.tight_layout()
 
         canvas = FigureCanvasTkAgg(fig, master=self.page4)
+        fig.savefig(f"{self.selected_model}_fit.svg", format="svg", bbox_inches="tight")
+
         canvas.draw()
         canvas.get_tk_widget().pack(fill="both", expand=True, padx=10, pady=(10, 5))
 
+        """
         parameter_lines = "\n".join(
             f"{k} = {v:.6g} MPa" for k, v in self.fit_params.items()
         )
@@ -608,7 +634,19 @@ class App:
             font=("Arial", 12, "bold")
         )
         results_label.pack(pady=(5, 5))
-
+        """
+        metrics_box = ScrolledText(
+            self.page4,
+            height=8,
+            font=("Courier", 10),
+            state="normal",
+            wrap="none",
+            relief="flat",
+            borderwidth=0,
+        )
+        metrics_box.insert("1.0", self.metrics_table)
+        metrics_box.configure(state="disabled")
+        metrics_box.pack(fill="x", padx=10, pady=(5, 5))
         nav_frame = tk.Frame(self.page4)
         nav_frame.pack(side="bottom", fill="x", pady=10)
         tk.Button(nav_frame, text="← Back",       command=self.show_page3, width=12).pack(side="left",  padx=20)
