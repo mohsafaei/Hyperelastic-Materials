@@ -60,3 +60,52 @@ Upon execution, the application provides the following outputs:
     *   A summary report containing fitting metrics and optimized material parameters (`.txt`), saved automatically to the working directory.
 
 
+
+
+
+This is a concise, professional `README.md` tailored for `grabit.py`, designed to get a researcher up and running quickly.
+
+***
+
+# Image Graph Digitizer
+
+**Image Graph Digitizer** is a lightweight, Python-based GUI tool designed for extracting numerical data from image-based plots. It provides a simple calibration workflow and allows for flexible data export, making it a useful utility for researchers needing to digitize data from legacy plots, paper figures, or experimental images.
+
+
+<table>
+  <tr>
+    <td width="100%">
+      <img src="Calibration\Digitizer_GUI.png" alt="Figure 1" style="border-radius: 8px; width: 100%;">
+    </td>
+  </tr>
+</table>
+
+## Features
+*   **Intuitive Calibration:** Supports linear and logarithmic axes (X and Y).
+*   **Navigation:** Zoom and Pan capabilities for precise point selection.
+*   **Dataset Management:** Create, rename, and organize multiple datasets within a single session.
+*   **Flexible Exports:** Save data in various formats including `.txt`, `.csv`, `.npz` (NumPy), and `.mat` (MATLAB).
+
+## Requirements
+*   **Python 3.x**
+*   **Pillow** (Required for image processing): `pip install Pillow`
+*   **NumPy & SciPy** (Optional, for advanced export formats): `pip install numpy scipy`
+
+## Quick Start
+1.  **Launch:** Run the script using `python grabit.py`.
+2.  **Load:** Click "Load Image..." to import your plot.
+3.  **Calibrate (Crucial):** 
+    *   Click "Calibrate".
+    *   Follow the status bar prompts to click four points on the graph: **X-Origin**, **X-Max**, **Y-Origin**, and **Y-Max**.
+    *   Enter the corresponding real-world values for these points when prompted.
+4.  **Grab:** Click "Grab Points" and begin clicking on your data series.
+5.  **Finish:** Press **Enter** when done to finalize the dataset, then save/export it using the sidebar.
+
+## Keyboard Shortcuts
+*   **`a` / `b`**: Zoom In / Zoom Out.
+*   **`Space`**: Fit image to window.
+*   **`r`**: Restore zoom level.
+*   **`Backspace` / `Delete`**: Remove the last grabbed point (during "Grabbing" mode).
+*   **`Enter`**: Complete point acquisition.
+*   **Mouse Middle-Click (Drag)**: Pan the image.
+

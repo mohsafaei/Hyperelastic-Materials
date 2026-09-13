@@ -20,11 +20,13 @@ try:
 except ImportError:
     savemat = None
 
+#--------------------------------------
+
 
 class GrabitApp:
     def __init__(self, root, filename=None):
         self.root = root
-        root.title("grabit - Image Digitizer")
+        root.title("Image Digitizer")
         root.geometry("900x620")
         root.minsize(720, 500)
 
