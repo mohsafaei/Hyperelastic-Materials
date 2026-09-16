@@ -1,18 +1,6 @@
 <img src="Hyperelastic_Materials.png" alt="Description" style="max-width: 100%; height: auto;">
 
 
----
-```graph TD
-    A[📂 Calibration] -->|Experimental Data Fitting| B[📂 Modeling]
-    B -->|Constitutive Model Formulation| C[📂 Subroutines]
-    C -->|Abaqus UHYPER Implementation| D((Finite Element Analysis))
-    style A fill:#e1f5fe,stroke:#01579b
-    style B fill:#fff9c4,stroke:#fbc02d
-    style C fill:#e8f5e9,stroke:#2e7d32
-```
-
-***
-
 # Hyperelastic Material Modeling
 
 This repository contains the computational framework developed for the constitutive characterization and finite element implementation of hyperelastic materials. The pipeline bridges the gap between experimental characterization and numerical simulation.
