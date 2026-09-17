@@ -39,8 +39,10 @@ Outputs:
 #        Modules
 # =========================
 
+from importlib.resources import path
 import tkinter as tk
 import csv
+import pandas as pd
 import numpy as np
 from tkinter import filedialog, messagebox, font
 from matplotlib.figure import Figure
@@ -64,6 +66,13 @@ except Exception:
 # =========================
 #   Module-level helpers
 # =========================
+
+def _is_number(value):
+    try:
+        float(value)
+        return True
+    except (TypeError, ValueError):
+        return False
 
 def _metrics(y_exp, y_model):
     res = y_exp - y_model
@@ -181,10 +190,45 @@ class App:
         nav_frame.pack(side="bottom", fill="x", pady=15)
         tk.Button(nav_frame, text="Start", command=self.show_page2, width=20).pack()
 
+
+    def _load_rows(self, path):
+
+        """
+        Return a list of 4-tuples (u_stretch, u_stress, s_stretch, s_stress).
+        """
+
+        if path.lower().endswith((".xlsx", ".xls")):
+            df = pd.read_excel(path, header=None)
+        else:  # assume CSV
+            df = pd.read_csv(path, header=None)
+
+        # Drop completely empty rows / rows with NaN in any needed column
+        df = df.dropna(axis=0, how="all")
+        # If the first row looks like a header (non-numeric), drop it
+        if len(df) and all(not _is_number(v) for v in df.iloc[0]):
+            df = df.iloc[1:]
+        # Keep only rows that have at least 4 usable values
+        rows = []
+        for _, line in df.iterrows():
+            vals = line.tolist()
+            vals = vals[:4]  # we need only first four columns
+            if len(vals) < 4:
+                continue
+            try:
+                rows.append(tuple(float(v) if _is_number(v) else None for v in vals))
+            except (TypeError, ValueError):
+                continue
+        return rows
+
+
     def browse_file(self):
         filepath = filedialog.askopenfilename(
             title="Select a file",
-            filetypes=[("CSV files", "*.csv"), ("All files", "*.*")]
+            filetypes=[
+                ("CSV files", "*.csv"),
+                ("Excel files", "*.xlsx *.xls"),
+                ("All files", "*.*")
+            ]
         )
 
         if not filepath:
@@ -199,31 +243,26 @@ class App:
         self.shear_stress     = []
 
         try:
-            with open(self.selected_file, "r", newline="", encoding="utf-8-sig") as csv_file:
-                reader = csv.reader(csv_file)
-                next(reader, None)
+            rows = self._load_rows(filepath)
 
-                for row_number, row in enumerate(reader, start=2):
-                    if not row or all(not value.strip() for value in row):
-                        continue
+            if not rows:
+                raise ValueError("The file contains no data rows.")
 
-                    if len(row) < 4:
-                        raise ValueError(f"Row {row_number} has fewer than four columns.")
-
-                    self.uniaxial_stretch.append(float(row[0]))
-                    self.uniaxial_stress.append(float(row[1]))
-                    self.shear_stretch.append(float(row[2]))
-                    self.shear_stress.append(float(row[3]))
-
-            if not self.uniaxial_stretch:
-                raise ValueError("The CSV file contains no data rows.")
+            for row_number, (a, b, c, d) in enumerate(rows, start=2):
+                if a is None or b is None or c is None or d is None:
+                    continue
+                self.uniaxial_stretch.append(float(a))
+                self.uniaxial_stress.append(float(b))
+                self.shear_stretch.append(float(c))
+                self.shear_stress.append(float(d))
 
         except (OSError, ValueError) as error:
-            messagebox.showerror("Invalid CSV file", f"Could not read the file:\n{error}")
+            messagebox.showerror("Invalid file", f"Could not read the file:\n{error}")
             return False
 
         self.show_page3()
         return True
+
 
     def build_page2(self):
         content_frame = tk.Frame(self.page2)
