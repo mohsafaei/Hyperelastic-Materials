@@ -352,7 +352,7 @@ class App:
                 r_s = stress_s      - nh_pureshear(lam_s,    c10)
                 return np.concatenate([r_u, r_s])
 
-            result = least_squares(residuals, x0=[0.1], bounds=([1e-6], [5]))
+            result = least_squares(residuals, x0=[0.01], bounds=([1e-6], [10]))
             c10 = result.x[0]
             print(f"Neo-Hookean c10: {c10:.6g} MPa")
             self.fit_params = {"c10": c10}
@@ -371,7 +371,7 @@ class App:
                 r_s = stress_s      - mr_pureshear(lam_s,    c10, c01)
                 return np.concatenate([r_u, r_s])
 
-            result = least_squares(residuals, x0=[0.1, 0.05], bounds=([1e-6, 1e-3], [5, 5]))
+            result = least_squares(residuals, x0=[0.051, 0.005], bounds=([1e-6, 1e-4], [15, 15]))
             c10, c01 = result.x
             print(f"Mooney-Rivlin c10, c01: {c10:.6g} MPa, {c01:.6g} MPa")
             self.fit_params = {"c10": c10, "c01": c01}
@@ -394,7 +394,7 @@ class App:
                 r_s = stress_s - yeoh_pureshear(lam_s, c1, c2, c3)
                 return np.concatenate([r_u, r_s])
 
-            result = least_squares(residuals, x0=[0.2, -0.015, 0.003],
+            result = least_squares(residuals, x0=[0.1, -0.01, 0.001],
                                    bounds=([-1, -1, -1], [1, 1, 1]))
             c1, c2, c3 = result.x
             print(f"Yeoh c1, c2, c3: {c1:.6g} MPa, {c2:.6g} MPa, {c3:.6g} MPa")
