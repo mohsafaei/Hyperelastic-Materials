@@ -89,17 +89,15 @@ The software includes the following hyperelastic material models:
 
 ---
 
-# Image Graph Digitizer (`grabit.py`)
+# Image Graph Digitizer (`Digitizer.py.py`)
 
 **Image Graph Digitizer** is a lightweight, Python-based GUI tool designed for extracting numerical data from image-based plots. It provides a simple calibration workflow and flexible data export options, making it an essential utility for researchers needing to digitize data from legacy plots, literature figures, or experimental images.
 
-<table>
-  <tr>
-    <td width="100%">
-      <img src="Digitizer_GUI.png" alt="Digitizer GUI" style="border-radius: 8px; width: 100%;">
-    </td>
-  </tr>
-</table>
+<figure align="center">
+  <img src="Digitizer_GUI.png" alt="Digitizer GUI" width="100%" style="border-radius: 8px;">
+  <figcaption><em>User interface of the Image Graph Digitizer (<code>grabit.py</code>).</em></figcaption>
+</figure>
+
 
 ## Features
 * **Intuitive Calibration:** Supports both linear and logarithmic axes (X and Y).
